@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Privacy Policy</title>
+<style>
+body {
+    background-color: #262626;
+	color: #ffffff;
+}
+table, td {
+    border: 0px solid black;
+    border-collapse: collapse;
+}
+td {
+    padding: 5px;
+    text-align: left;    
+}
+</style>
+<script>
+function getUrlParameter(sParam)
+{
+    var sPageURL = window.location.search.substring(1);
+    var sURLVariables = sPageURL.split('&');
+    for (var i = 0; i < sURLVariables.length; i++) 
+    {
+        var sParameterName = sURLVariables[i].split('=');
+        if (sParameterName[0] == sParam) 
+        {
+            return sParameterName[1];
+        }
+    }
+}
+</script>
+</head>
+<table>
+<tr>
+<td><img src="android.png" width="64" height="64"></td>
+<td><h1><label id="ap1"></label></h1></td>
+</tr>
+</table>
+<br><br>
+This privacy policy covers the use of the <b><font color=#ce923e><label id="ap2"></label></font></b> application.<br><br>
+
+<b><font color=#ce923e><label id="ap3"></label></font></b> does not collect any statistics, personal information, or analytics from our users, other than built in mechanisms that are present for all the mobile or embedded applications in their respective main distribution channels.<br>
+
+Cookies are not stored at any point by <b><font color=#ce923e><label id="ap4"></label></font></b>, <u>Google ads service</u> may store cookies using its own mechanisms.<br>
+
+The developer <b><font color=#7ba6b4>DnG Software</font></b> does not have access to any information stored on the users device.<br><br><br>
+</body>
+<script>
+var header = getUrlParameter('app');
+header = header.replace("+", " "); 
+header = header.replace("%20", " ");
+document.getElementById('ap1').innerHTML = header;
+document.getElementById('ap2').innerHTML = header;
+document.getElementById('ap3').innerHTML = header;
+document.getElementById('ap4').innerHTML = header;
+</script>
+</html>
