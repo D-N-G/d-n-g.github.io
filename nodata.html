@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Privacy Policy</title>
+<style>
+body {
+    background-color: #262626;
+	color: #ffffff;
+}
+a:link {
+    color: #7ba6b4;
+}
+a:visited {
+    color: #7ba6b4;
+}
+ a:hover {
+    color: red;
+}
+a:active {
+     color: #7ba6b4;
+} 
+</style>
+<script>
+function getUrlParameter(sParam)
+{
+    var sPageURL = window.location.search.substring(1);
+    var sURLVariables = sPageURL.split('&');
+    for (var i = 0; i < sURLVariables.length; i++) 
+    {
+        var sParameterName = sURLVariables[i].split('=');
+        if (sParameterName[0] == sParam) 
+        {
+            return sParameterName[1];
+        }
+    }
+}
+</script>
+</head>
+
+<table>
+<tr>
+<td><img src="android.png" width="64" height="64"></td>
+<td><h1><label id="ap9"></label></h1></td>
+</tr>
+</table>
+<br><br>
+
+
+<center><h1>Privacy Policy</h1><br></center>
+
+This page is used to inform visitors regarding our policies with the collection, use, and disclosure of Personal Information if anyone decided to use the <b><font color=#ce923e><label id="ap1"></label></font></b> application.<br><br>
+
+
+<b><em><h3>Information, Data Collection and Use</h3></em></b><br>
+
+<font color=#ce923e><b>This application collects no data or personal information.</b></font>
+<br><br>
+
+
+<b><em><h3>Changes to This Privacy Policy</h3></em></b><br>
+
+I may update our Privacy Policy from time to time. Thus, you are advised to review this page periodically for any changes.<br>
+I will notify you of any changes by posting the new Privacy Policy on this page.<br>
+These changes are effective immediately after they are posted on this page.<br><br>
+
+<b><em><h3>Contact Us</h3></em></b><br>
+
+If you have any questions or suggestions about my Privacy Policy, do not hesitate to contact me.<br>
+
+<ul><li><a href="dngsoftware@protonmail.com">DnG Software</a></li></ul><br>
+
+<br><br><br>
+</body>
+<script>
+var header = getUrlParameter('app');
+header = header.replace("+", " "); 
+header = header.replace("%20", " ");
+header = header.replace("+", " "); 
+header = header.replace("%20", " ");
+header = header.replace("+", " "); 
+header = header.replace("%20", " ");
+document.getElementById('ap1').innerHTML = header;
+document.getElementById('ap2').innerHTML = header;
+document.getElementById('ap3').innerHTML = header;
+document.getElementById('ap4').innerHTML = header;
+document.getElementById('ap5').innerHTML = header;
+document.getElementById('ap6').innerHTML = header;
+document.getElementById('ap7').innerHTML = header;
+document.getElementById('ap8').innerHTML = header;
+document.getElementById('ap9').innerHTML = header;
+</script>
+</html>
