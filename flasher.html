@@ -463,16 +463,14 @@
         document.getElementById('progressWrap').classList.add('visible');
         log('Flashing at 0x0...');
 
-        const imgStr = Array.from(bytes).map(b => String.fromCharCode(b)).join('');
-
         await loader.writeFlash({
-          fileArray: [{ data: imgStr, address: 0x0 }],
+          fileArray: [{ data: bytes, address: 0x0 }],
           flashMode: 'keep',
           flashFreq: 'keep',
           flashSize: 'keep',
           eraseAll: false,
           compress: true,
-          reportProgress(_, written, total) {
+          reportProgress(fileIndex, written, total) {
             const pct = (written / total) * 100;
             updateProgress(pct, 'Writing... ' + (written / 1024).toFixed(0) + ' / ' + (total / 1024).toFixed(0) + ' KB');
           },
