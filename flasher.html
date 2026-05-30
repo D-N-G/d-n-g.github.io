@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>CNC Control Flasher</title>
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css" />
+  <style>
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    body {
+      font-family: 'Courier New', Courier, monospace;
+      background: #f4f4f0;
+      color: #1a1a1a;
+      min-height: 100vh;
+      display: flex;
+      align-items: flex-start;
+      justify-content: center;
+      padding: 2rem 1rem;
+    }
+
+    .container {
+      width: 100%;
+      max-width: 480px;
+    }
+
+    .header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 1.5rem;
+    }
+
+    .logo {
+      width: 38px;
+      height: 38px;
+      background: #1a1a1a;
+      border-radius: 7px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+    }
+
+    .logo i { color: #f4f4f0; font-size: 19px; }
+
+    .title {
+      font-size: 15px;
+      font-weight: 600;
+      letter-spacing: 0.06em;
+      text-transform: uppercase;
+      color: #1a1a1a;
+    }
+
+    .subtitle {
+      font-size: 11px;
+      color: #888;
+      margin-top: 2px;
+      letter-spacing: 0.02em;
+    }
+
+    .section {
+      background: #fff;
+      border: 0.5px solid #ddd;
+      border-radius: 10px;
+      padding: 1rem 1.25rem;
+      margin-bottom: 10px;
+    }
+
+    .section-label {
+      font-size: 10px;
+      font-weight: 600;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: #999;
+      margin-bottom: 10px;
+    }
+
+    /* Chip selector */
+    .chip-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 8px;
+    }
+
+    .chip-btn {
+      padding: 14px 0;
+      border: 0.5px solid #ddd;
+      border-radius: 7px;
+      background: #f7f7f4;
+      cursor: pointer;
+      font-family: inherit;
+      font-size: 14px;
+      font-weight: 600;
+      color: #888;
+      letter-spacing: 0.05em;
+      transition: all 0.12s;
+    }
+
+    .chip-btn:hover { background: #fff; color: #333; }
+
+    .chip-btn.active {
+      border: 2px solid #639922;
+      background: #EAF3DE;
+      color: #3B6D11;
+    }
+
+    .firmware-tag {
+      margin-top: 10px;
+      padding: 6px 10px;
+      background: #f7f7f4;
+      border-radius: 6px;
+      border: 0.5px solid #e0e0e0;
+      font-size: 11px;
+      color: #888;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .firmware-tag i { font-size: 13px; }
+    .firmware-name { color: #1a1a1a; font-weight: 600; }
+
+    /* Baud rate */
+    .baud-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 8px;
+    }
+
+    .baud-btn {
+      padding: 10px 0;
+      border: 0.5px solid #ddd;
+      border-radius: 7px;
+      background: #f7f7f4;
+      cursor: pointer;
+      font-family: inherit;
+      font-size: 12px;
+      color: #888;
+      transition: all 0.12s;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .baud-btn:hover { background: #fff; color: #333; }
+
+    .baud-btn.active {
+      border: 2px solid #639922;
+      background: #EAF3DE;
+      color: #3B6D11;
+    }
+
+    .baud-val { font-size: 13px; font-weight: 600; }
+    .baud-hint { font-size: 10px; opacity: 0.7; }
+    .baud-btn.active .baud-hint { opacity: 1; }
+
+    /* Erase */
+    .erase-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-top: 10px;
+    }
+
+    .erase-row label { font-size: 12px; color: #666; cursor: pointer; }
+
+    input[type="checkbox"] { cursor: pointer; accent-color: #639922; }
+
+    /* Status */
+    .status-row {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      margin-bottom: 10px;
+    }
+
+    .status-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #ccc;
+      flex-shrink: 0;
+      transition: background 0.2s;
+    }
+
+    .status-dot.connected { background: #639922; box-shadow: 0 0 0 2px #EAF3DE; }
+    .status-dot.error { background: #A32D2D; }
+    .status-text { font-size: 12px; color: #888; }
+
+    /* Flash button */
+    .flash-btn {
+      width: 100%;
+      padding: 13px;
+      border: none;
+      border-radius: 8px;
+      background: #1a1a1a;
+      color: #f4f4f0;
+      font-family: inherit;
+      font-size: 13px;
+      font-weight: 600;
+      letter-spacing: 0.07em;
+      text-transform: uppercase;
+      cursor: pointer;
+      transition: opacity 0.12s;
+      margin-bottom: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+    }
+
+    .flash-btn:disabled { opacity: 0.35; cursor: not-allowed; }
+    .flash-btn:not(:disabled):hover { opacity: 0.8; }
+
+    /* Progress */
+    .progress-wrap { display: none; margin-bottom: 10px; }
+    .progress-wrap.visible { display: block; }
+
+    .progress-bar-bg {
+      height: 4px;
+      background: #e8e8e4;
+      border-radius: 2px;
+      overflow: hidden;
+      margin-bottom: 6px;
+    }
+
+    .progress-bar-fg {
+      height: 100%;
+      width: 0%;
+      background: #639922;
+      border-radius: 2px;
+      transition: width 0.2s;
+    }
+
+    .progress-label {
+      font-size: 11px;
+      color: #888;
+      display: flex;
+      justify-content: space-between;
+    }
+
+    /* Log */
+    .log {
+      background: #f7f7f4;
+      border: 0.5px solid #e0e0e0;
+      border-radius: 7px;
+      padding: 10px 12px;
+      height: 200px;
+      overflow-y: auto;
+      font-family: inherit;
+      font-size: 11px;
+      line-height: 1.7;
+    }
+
+    .log-line { color: #888; }
+    .log-line.ok { color: #3B6D11; }
+    .log-line.err { color: #A32D2D; }
+    .log-line.warn { color: #BA7517; }
+    .log-line.info { color: #1a1a1a; }
+
+    /* Scrollbar */
+    .log::-webkit-scrollbar { width: 4px; }
+    .log::-webkit-scrollbar-track { background: transparent; }
+    .log::-webkit-scrollbar-thumb { background: #ccc; border-radius: 2px; }
+
+    @media (prefers-color-scheme: dark) {
+      body { background: #1a1a1a; color: #e8e8e4; }
+      .logo { background: #e8e8e4; }
+      .logo i { color: #1a1a1a; }
+      .title { color: #e8e8e4; }
+      .section { background: #242424; border-color: #333; }
+      .chip-btn { background: #2c2c2c; border-color: #3a3a3a; color: #888; }
+      .chip-btn:hover { background: #333; color: #ccc; }
+      .chip-btn.active { background: #1e2e12; color: #9DC45A; border-color: #639922; }
+      .firmware-tag { background: #2c2c2c; border-color: #3a3a3a; }
+      .firmware-name { color: #e8e8e4; }
+      .baud-btn { background: #2c2c2c; border-color: #3a3a3a; color: #888; }
+      .baud-btn:hover { background: #333; color: #ccc; }
+      .baud-btn.active { background: #1e2e12; color: #9DC45A; border-color: #639922; }
+      .erase-row label { color: #888; }
+      .flash-btn { background: #e8e8e4; color: #1a1a1a; }
+      .progress-bar-bg { background: #2c2c2c; }
+      .log { background: #242424; border-color: #333; }
+      .log-line.ok { color: #9DC45A; }
+      .log-line.info { color: #e8e8e4; }
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+
+    <div class="header">
+      <div class="logo"><i class="ti ti-circuit-board" aria-hidden="true"></i></div>
+      <div>
+        <div class="title">CNC Control Flasher</div>
+        <div class="subtitle">ESP32-S2 / ESP32-S3</div>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-label">Target chip</div>
+      <div class="chip-grid">
+        <button class="chip-btn active" id="chipS2" onclick="selectChip('s2')">ESP32-S2</button>
+        <button class="chip-btn" id="chipS3" onclick="selectChip('s3')">ESP32-S3</button>
+      </div>
+      <div class="firmware-tag">
+        <i class="ti ti-file-zip" aria-hidden="true"></i>
+        <span>Firmware:&nbsp;</span><span class="firmware-name" id="firmwareName"></span>
+      </div>
+    </div>
+
+    <div class="section">
+      <div class="section-label">Baud rate</div>
+      <div class="baud-grid">
+        <button class="baud-btn" id="baud-115200" onclick="selectBaud(115200)">
+          <span class="baud-val">115200</span>
+          <span class="baud-hint">safe</span>
+        </button>
+        <button class="baud-btn active" id="baud-460800" onclick="selectBaud(460800)">
+          <span class="baud-val">460800</span>
+          <span class="baud-hint">recommended</span>
+        </button>
+        <button class="baud-btn" id="baud-921600" onclick="selectBaud(921600)">
+          <span class="baud-val">921600</span>
+          <span class="baud-hint">fast</span>
+        </button>
+      </div>
+      <div class="erase-row">
+        <input type="checkbox" id="eraseAll" />
+        <label for="eraseAll">Erase all flash before writing</label>
+      </div>
+    </div>
+
+    <div class="status-row">
+      <div class="status-dot" id="statusDot"></div>
+      <div class="status-text" id="statusText">Ready</div>
+    </div>
+
+    <button class="flash-btn" id="flashBtn" onclick="startFlash()">
+      <i class="ti ti-bolt" aria-hidden="true"></i>
+      <span id="flashBtnLabel">Connect &amp; Flash</span>
+    </button>
+
+    <div class="progress-wrap" id="progressWrap">
+      <div class="progress-bar-bg"><div class="progress-bar-fg" id="progressBar"></div></div>
+      <div class="progress-label">
+        <span id="progressText">Writing...</span>
+        <span id="progressPct">0%</span>
+      </div>
+    </div>
+
+    <div class="section" style="padding: 0;">
+      <div class="log" id="log"></div>
+    </div>
+
+  </div>
+
+  <script src="https://unpkg.com/esptool-js/bundle.js"></script>
+  <script>
+    // ─── FIRMWARE URLS ──────────────────────────────────────────────────────
+    const FIRMWARE = {
+      s2: {
+        url: 'https://github.com/DnG-Crafts/CNC-Control/releases/download/v1/cnc-control-esp32s2.bin',
+        label: 'cnc-control-esp32s2.bin',
+      },
+      s3: {
+        url: 'https://github.com/DnG-Crafts/CNC-Control/releases/download/v1/cnc-control-esp32s3.bin',
+        label: 'cnc-control-esp32s3.bin',
+      },
+    };
+    // ───────────────────────────────────────────────────────────────────────
+
+    let selectedChip = 's2';
+    let selectedBaud = 460800;
+    let transport = null;
+
+    function selectChip(chip) {
+      selectedChip = chip;
+      document.getElementById('chipS2').classList.toggle('active', chip === 's2');
+      document.getElementById('chipS3').classList.toggle('active', chip === 's3');
+      document.getElementById('firmwareName').textContent = FIRMWARE[chip].label;
+    }
+
+    function selectBaud(b) {
+      selectedBaud = b;
+      [115200, 460800, 921600].forEach(v => {
+        document.getElementById('baud-' + v).classList.toggle('active', v === b);
+      });
+    }
+
+    function log(msg, type = '') {
+      const el = document.getElementById('log');
+      const line = document.createElement('div');
+      line.className = 'log-line' + (type ? ' ' + type : '');
+      const ts = new Date().toLocaleTimeString('en-AU', { hour12: false, hour: '2-digit', minute: '2-digit', second: '2-digit' });
+      line.textContent = '[' + ts + '] ' + msg;
+      el.appendChild(line);
+      el.scrollTop = el.scrollHeight;
+    }
+
+    function setStatus(text, state) {
+      document.getElementById('statusText').textContent = text;
+      document.getElementById('statusDot').className = 'status-dot' + (state ? ' ' + state : '');
+    }
+
+    function updateProgress(pct, label) {
+      document.getElementById('progressBar').style.width = pct + '%';
+      document.getElementById('progressPct').textContent = Math.round(pct) + '%';
+      if (label) document.getElementById('progressText').textContent = label;
+    }
+
+    async function startFlash() {
+      if (!('serial' in navigator)) {
+        log('Web Serial API not supported — use Chrome or Edge 89+', 'err');
+        return;
+      }
+
+      const fw = FIRMWARE[selectedChip];
+      const btn = document.getElementById('flashBtn');
+      btn.disabled = true;
+      document.getElementById('flashBtnLabel').textContent = 'Working...';
+      document.getElementById('progressWrap').classList.remove('visible');
+      updateProgress(0, 'Writing...');
+
+      try {
+        log('Downloading ' + fw.label + '...');
+        const res = await fetch(fw.url);
+        if (!res.ok) throw new Error('Download failed: HTTP ' + res.status);
+        const bytes = new Uint8Array(await res.arrayBuffer());
+        log('Downloaded ' + (bytes.byteLength / 1024).toFixed(1) + ' KB', 'ok');
+
+        log('Select your device in the serial port dialog...');
+        const port = await navigator.serial.requestPort();
+        transport = new ESPLoader.Transport(port, true);
+
+        const terminal = {
+          clean() {},
+          writeLine(d) { log(d); },
+          write(d) { if (d.trim()) log(d); },
+        };
+
+        const loader = new ESPLoader.ESPLoader({
+          transport,
+          baudrate: selectedBaud,
+          terminal,
+          debugLogging: false,
+        });
+
+        log('Connecting...');
+        setStatus('Connecting...', '');
+        const chip = await loader.main();
+        log('Connected — ' + chip, 'ok');
+
+        const expected = selectedChip === 's2' ? 'ESP32-S2' : 'ESP32-S3';
+        if (!chip.includes(expected)) {
+          log('Warning: detected ' + chip + ' but target is ' + expected, 'warn');
+        }
+
+        setStatus('Connected — ' + chip, 'connected');
+
+        if (document.getElementById('eraseAll').checked) {
+          log('Erasing flash...');
+          await loader.eraseFlash();
+          log('Flash erased', 'ok');
+        }
+
+        document.getElementById('progressWrap').classList.add('visible');
+        log('Flashing at 0x0...');
+
+        const imgStr = Array.from(bytes).map(b => String.fromCharCode(b)).join('');
+
+        await loader.writeFlash({
+          fileArray: [{ data: imgStr, address: 0x0 }],
+          flashMode: 'keep',
+          flashFreq: 'keep',
+          flashSize: 'keep',
+          eraseAll: false,
+          compress: true,
+          reportProgress(_, written, total) {
+            const pct = (written / total) * 100;
+            updateProgress(pct, 'Writing... ' + (written / 1024).toFixed(0) + ' / ' + (total / 1024).toFixed(0) + ' KB');
+          },
+        });
+
+        updateProgress(100, 'Complete');
+        log('Flash complete!', 'ok');
+        await loader.after('hard_reset');
+        log('Device reset — firmware is running', 'ok');
+        setStatus('Done — ' + chip, 'connected');
+
+      } catch (e) {
+        log('Error: ' + e.message, 'err');
+        setStatus('Error', 'error');
+      } finally {
+        btn.disabled = false;
+        document.getElementById('flashBtnLabel').textContent = 'Connect & Flash';
+        if (transport) { try { await transport.disconnect(); } catch (_) {} transport = null; }
+      }
+    }
+
+    selectChip('s2');
+    log('Select your target chip then click Connect & Flash', 'info');
+  </script>
+</body>
+</html>
