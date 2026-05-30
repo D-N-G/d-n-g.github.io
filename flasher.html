@@ -358,11 +358,11 @@
     // ─── FIRMWARE URLS ──────────────────────────────────────────────────────
     const FIRMWARE = {
       s2: {
-        url: 'https://github.com/D-N-G/d-n-g.github.io/releases/download/CNC/cnc-control-esp32s2.bin',
+        url: 'https://github.com/DnG-Crafts/CNC-Control/releases/download/ESP32/cnc-control-esp32s2.bin',
         label: 'cnc-control-esp32s2.bin',
       },
       s3: {
-        url: 'https://github.com/D-N-G/d-n-g.github.io/releases/download/CNC/cnc-control-esp32s3.bin',
+        url: 'https://github.com/DnG-Crafts/CNC-Control/releases/download/ESP32/cnc-control-esp32s3.bin',
         label: 'cnc-control-esp32s3.bin',
       },
     };
@@ -422,7 +422,23 @@
 
       try {
         log('Downloading ' + fw.label + '...');
-        const res = await fetch(fw.url);
+        // GitHub release assets redirect to S3 — resolve the asset URL via API first
+        let downloadUrl = fw.url;
+        if (fw.url.includes('github.com') && fw.url.includes('/releases/download/')) {
+          // Convert browser URL to API URL to get direct S3 link
+          const match = fw.url.match(/github\.com\/([^\/]+)\/([^\/]+)\/releases\/download\/([^\/]+)\/(.+)/);
+          if (match) {
+            const [, owner, repo, tag, filename] = match;
+            log('Resolving GitHub asset URL...');
+            const apiRes = await fetch(`https://api.github.com/repos/${owner}/${repo}/releases/tags/${tag}`);
+            if (!apiRes.ok) throw new Error('GitHub API error: HTTP ' + apiRes.status);
+            const release = await apiRes.json();
+            const asset = release.assets.find(a => a.name === filename);
+            if (!asset) throw new Error('Asset not found in release: ' + filename);
+            downloadUrl = asset.browser_download_url;
+          }
+        }
+        const res = await fetch(downloadUrl);
         if (!res.ok) throw new Error('Download failed: HTTP ' + res.status);
         const bytes = new Uint8Array(await res.arrayBuffer());
         log('Downloaded ' + (bytes.byteLength / 1024).toFixed(1) + ' KB', 'ok');
