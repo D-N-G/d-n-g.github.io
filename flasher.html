@@ -3,7 +3,7 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>CNC Control Flasher</title>
+  <title>CNC Control ESP32 Firmware Flasher</title>
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/tabler-icons.min.css" />
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
@@ -298,8 +298,8 @@
     <div class="section">
       <div class="section-label">Target chip</div>
       <div class="chip-grid">
-        <button class="chip-btn active" id="chipS2" onclick="selectChip('s2')">ESP32-S2</button>
-        <button class="chip-btn" id="chipS3" onclick="selectChip('s3')">ESP32-S3</button>
+        <button class="chip-btn active" id="chipS2">ESP32-S2</button>
+        <button class="chip-btn" id="chipS3">ESP32-S3</button>
       </div>
       <div class="firmware-tag">
         <i class="ti ti-file-zip" aria-hidden="true"></i>
@@ -310,15 +310,15 @@
     <div class="section">
       <div class="section-label">Baud rate</div>
       <div class="baud-grid">
-        <button class="baud-btn" id="baud-115200" onclick="selectBaud(115200)">
+        <button class="baud-btn" id="baud-115200">
           <span class="baud-val">115200</span>
           <span class="baud-hint">safe</span>
         </button>
-        <button class="baud-btn active" id="baud-460800" onclick="selectBaud(460800)">
+        <button class="baud-btn active" id="baud-460800">
           <span class="baud-val">460800</span>
           <span class="baud-hint">recommended</span>
         </button>
-        <button class="baud-btn" id="baud-921600" onclick="selectBaud(921600)">
+        <button class="baud-btn" id="baud-921600">
           <span class="baud-val">921600</span>
           <span class="baud-hint">fast</span>
         </button>
@@ -334,7 +334,7 @@
       <div class="status-text" id="statusText">Ready</div>
     </div>
 
-    <button class="flash-btn" id="flashBtn" onclick="startFlash()">
+    <button class="flash-btn" id="flashBtn" >
       <i class="ti ti-bolt" aria-hidden="true"></i>
       <span id="flashBtnLabel">Connect &amp; Flash</span>
     </button>
@@ -353,9 +353,8 @@
 
   </div>
 
-  <script src="https://unpkg.com/esptool-js/bundle.js"></script>
-  <script>
-    // ─── FIRMWARE URLS ──────────────────────────────────────────────────────
+  <script type="module">
+    import { ESPLoader, Transport } from "https://unpkg.com/esptool-js/bundle.js";
     const FIRMWARE = {
       s2: {
         url: 'https://d-n-g.github.io/firmware/cnc-control-esp32s2.bin',
@@ -366,7 +365,6 @@
         label: 'cnc-control-esp32s3.bin',
       },
     };
-    // ───────────────────────────────────────────────────────────────────────
 
     let selectedChip = 's2';
     let selectedBaud = 460800;
@@ -422,30 +420,14 @@
 
       try {
         log('Downloading ' + fw.label + '...');
-        // GitHub release assets redirect to S3 — resolve the asset URL via API first
-        let downloadUrl = fw.url;
-        if (fw.url.includes('github.com') && fw.url.includes('/releases/download/')) {
-          // Convert browser URL to API URL to get direct S3 link
-          const match = fw.url.match(/github\.com\/([^\/]+)\/([^\/]+)\/releases\/download\/([^\/]+)\/(.+)/);
-          if (match) {
-            const [, owner, repo, tag, filename] = match;
-            log('Resolving GitHub asset URL...');
-            const apiRes = await fetch(`https://api.github.com/repos/${owner}/${repo}/releases/tags/${tag}`);
-            if (!apiRes.ok) throw new Error('GitHub API error: HTTP ' + apiRes.status);
-            const release = await apiRes.json();
-            const asset = release.assets.find(a => a.name === filename);
-            if (!asset) throw new Error('Asset not found in release: ' + filename);
-            downloadUrl = asset.browser_download_url;
-          }
-        }
-        const res = await fetch(downloadUrl);
+        const res = await fetch(fw.url);
         if (!res.ok) throw new Error('Download failed: HTTP ' + res.status);
         const bytes = new Uint8Array(await res.arrayBuffer());
         log('Downloaded ' + (bytes.byteLength / 1024).toFixed(1) + ' KB', 'ok');
 
         log('Select your device in the serial port dialog...');
         const port = await navigator.serial.requestPort();
-        transport = new ESPLoader.Transport(port, true);
+        transport = new Transport(port, true);
 
         const terminal = {
           clean() {},
@@ -453,7 +435,7 @@
           write(d) { if (d.trim()) log(d); },
         };
 
-        const loader = new ESPLoader.ESPLoader({
+        const loader = new ESPLoader({
           transport,
           baudrate: selectedBaud,
           terminal,
@@ -511,6 +493,13 @@
         if (transport) { try { await transport.disconnect(); } catch (_) {} transport = null; }
       }
     }
+
+    document.getElementById('chipS2').addEventListener('click', () => selectChip('s2'));
+    document.getElementById('chipS3').addEventListener('click', () => selectChip('s3'));
+    document.getElementById('baud-115200').addEventListener('click', () => selectBaud(115200));
+    document.getElementById('baud-460800').addEventListener('click', () => selectBaud(460800));
+    document.getElementById('baud-921600').addEventListener('click', () => selectBaud(921600));
+    document.getElementById('flashBtn').addEventListener('click', startFlash);
 
     selectChip('s2');
     log('Select your target chip then click Connect & Flash', 'info');
