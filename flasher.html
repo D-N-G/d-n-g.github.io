@@ -31,18 +31,15 @@
       margin-bottom: 1.5rem;
     }
 
-    .logo {
+    .logo { background: transparent;
       width: 38px;
       height: 38px;
-      background: #1a1a1a;
-      border-radius: 7px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
+      
       flex-shrink: 0;
+      
     }
 
-    .logo i { color: #f4f4f0; font-size: 19px; }
+    .logo img { width: 100%; height: 100%; display: block; }
 
     .title {
       font-size: 15px;
@@ -86,7 +83,7 @@
     .chip-btn {
       padding: 14px 0;
       border: 0.5px solid #ddd;
-      border-radius: 7px;
+      
       background: #f7f7f4;
       cursor: pointer;
       font-family: inherit;
@@ -131,7 +128,7 @@
     .baud-btn {
       padding: 10px 0;
       border: 0.5px solid #ddd;
-      border-radius: 7px;
+      
       background: #f7f7f4;
       cursor: pointer;
       font-family: inherit;
@@ -222,7 +219,7 @@
       height: 4px;
       background: #e8e8e4;
       border-radius: 2px;
-      overflow: hidden;
+      
       margin-bottom: 6px;
     }
 
@@ -245,7 +242,7 @@
     .log {
       background: #f7f7f4;
       border: 0.5px solid #e0e0e0;
-      border-radius: 7px;
+      
       padding: 10px 12px;
       height: 200px;
       overflow-y: auto;
@@ -267,8 +264,7 @@
 
     @media (prefers-color-scheme: dark) {
       body { background: #1a1a1a; color: #e8e8e4; }
-      .logo { background: #e8e8e4; }
-      .logo i { color: #1a1a1a; }
+      .logo { background: transparent; }
       .title { color: #e8e8e4; }
       .section { background: #242424; border-color: #333; }
       .chip-btn { background: #2c2c2c; border-color: #3a3a3a; color: #888; }
@@ -292,7 +288,7 @@
   <div class="container">
 
     <div class="header">
-      <div class="logo"><i class="ti ti-circuit-board" aria-hidden="true"></i></div>
+      <div class="logo"><img src="icon.png" alt="CNC Control" /></div>
       <div>
         <div class="title">CNC Control Flasher</div>
         <div class="subtitle">ESP32-S2 / ESP32-S3</div>
@@ -362,11 +358,11 @@
     // ─── FIRMWARE URLS ──────────────────────────────────────────────────────
     const FIRMWARE = {
       s2: {
-        url: 'https://github.com/DnG-Crafts/CNC-Control/releases/download/v1/cnc-control-esp32s2.bin',
+        url: 'https://github.com/YOUR_USER/YOUR_REPO/releases/download/vX.X.X/cnc-control-esp32s2.bin',
         label: 'cnc-control-esp32s2.bin',
       },
       s3: {
-        url: 'https://github.com/DnG-Crafts/CNC-Control/releases/download/v1/cnc-control-esp32s3.bin',
+        url: 'https://github.com/YOUR_USER/YOUR_REPO/releases/download/vX.X.X/cnc-control-esp32s3.bin',
         label: 'cnc-control-esp32s3.bin',
       },
     };
