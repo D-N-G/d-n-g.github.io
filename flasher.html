@@ -10,8 +10,8 @@
 
     body {
       font-family: 'Courier New', Courier, monospace;
-      background: #f4f4f0;
-      color: #1a1a1a;
+      background: #191919;
+      color: #e8e8e4;
       min-height: 100vh;
       display: flex;
       align-items: flex-start;
@@ -31,12 +31,11 @@
       margin-bottom: 1.5rem;
     }
 
-    .logo { background: transparent;
+    .logo {
+      background: transparent;
       width: 38px;
       height: 38px;
-      
       flex-shrink: 0;
-      
     }
 
     .logo img { width: 100%; height: 100%; display: block; }
@@ -46,19 +45,19 @@
       font-weight: 600;
       letter-spacing: 0.06em;
       text-transform: uppercase;
-      color: #1a1a1a;
+      color: #e8e8e4;
     }
 
     .subtitle {
-      font-size: 11px;
-      color: #888;
+      font-size: 12px;
+      color: #999;
       margin-top: 2px;
       letter-spacing: 0.02em;
     }
 
     .section {
-      background: #fff;
-      border: 0.5px solid #ddd;
+      background: #242424;
+      border: 1px solid #333;
       border-radius: 10px;
       padding: 1rem 1.25rem;
       margin-bottom: 10px;
@@ -69,7 +68,7 @@
       font-weight: 600;
       letter-spacing: 0.12em;
       text-transform: uppercase;
-      color: #999;
+      color: #777;
       margin-bottom: 10px;
     }
 
@@ -82,9 +81,9 @@
 
     .chip-btn {
       padding: 14px 0;
-      border: 0.5px solid #ddd;
-      
-      background: #f7f7f4;
+      border: 1px solid #3a3a3a;
+      border-radius: 7px;
+      background: #2c2c2c;
       cursor: pointer;
       font-family: inherit;
       font-size: 14px;
@@ -94,20 +93,20 @@
       transition: all 0.12s;
     }
 
-    .chip-btn:hover { background: #fff; color: #333; }
+    .chip-btn:hover { background: #333; color: #ccc; }
 
     .chip-btn.active {
       border: 2px solid #639922;
-      background: #EAF3DE;
-      color: #3B6D11;
+      background: #1e2e12;
+      color: #9DC45A;
     }
 
     .firmware-tag {
       margin-top: 10px;
       padding: 6px 10px;
-      background: #f7f7f4;
+      background: #2c2c2c;
       border-radius: 6px;
-      border: 0.5px solid #e0e0e0;
+      border: 1px solid #3a3a3a;
       font-size: 11px;
       color: #888;
       display: flex;
@@ -116,7 +115,7 @@
     }
 
     .firmware-tag i { font-size: 13px; }
-    .firmware-name { color: #1a1a1a; font-weight: 600; }
+    .firmware-name { color: #e8e8e4; font-weight: 600; }
 
     /* Baud rate */
     .baud-grid {
@@ -127,9 +126,9 @@
 
     .baud-btn {
       padding: 10px 0;
-      border: 0.5px solid #ddd;
-      
-      background: #f7f7f4;
+      border: 1px solid #3a3a3a;
+      border-radius: 7px;
+      background: #2c2c2c;
       cursor: pointer;
       font-family: inherit;
       font-size: 12px;
@@ -141,12 +140,12 @@
       gap: 4px;
     }
 
-    .baud-btn:hover { background: #fff; color: #333; }
+    .baud-btn:hover { background: #333; color: #ccc; }
 
     .baud-btn.active {
       border: 2px solid #639922;
-      background: #EAF3DE;
-      color: #3B6D11;
+      background: #1e2e12;
+      color: #9DC45A;
     }
 
     .baud-val { font-size: 13px; font-weight: 600; }
@@ -161,7 +160,7 @@
       margin-top: 10px;
     }
 
-    .erase-row label { font-size: 12px; color: #666; cursor: pointer; }
+    .erase-row label { font-size: 12px; color: #eee; cursor: pointer; }
 
     input[type="checkbox"] { cursor: pointer; accent-color: #639922; }
 
@@ -177,12 +176,12 @@
       width: 8px;
       height: 8px;
       border-radius: 50%;
-      background: #ccc;
+      background: #444;
       flex-shrink: 0;
       transition: background 0.2s;
     }
 
-    .status-dot.connected { background: #639922; box-shadow: 0 0 0 2px #EAF3DE; }
+    .status-dot.connected { background: #639922; box-shadow: 0 0 0 2px #1e2e12; }
     .status-dot.error { background: #A32D2D; }
     .status-text { font-size: 12px; color: #888; }
 
@@ -192,8 +191,8 @@
       padding: 13px;
       border: none;
       border-radius: 8px;
-      background: #1a1a1a;
-      color: #f4f4f0;
+      background: #e8e8e4;
+      color: #1a1a1a;
       font-family: inherit;
       font-size: 13px;
       font-weight: 600;
@@ -217,9 +216,9 @@
 
     .progress-bar-bg {
       height: 4px;
-      background: #e8e8e4;
+      background: #2c2c2c;
       border-radius: 2px;
-      
+      overflow: hidden;
       margin-bottom: 6px;
     }
 
@@ -240,49 +239,27 @@
 
     /* Log */
     .log {
-      background: #f7f7f4;
-      border: 0.5px solid #e0e0e0;
-      
+      background: #242424;
+      border: none;
       padding: 10px 12px;
       height: 200px;
       overflow-y: auto;
+	  margin: 6px;
       font-family: inherit;
       font-size: 11px;
       line-height: 1.7;
     }
 
     .log-line { color: #888; }
-    .log-line.ok { color: #3B6D11; }
-    .log-line.err { color: #A32D2D; }
-    .log-line.warn { color: #BA7517; }
-    .log-line.info { color: #1a1a1a; }
+    .log-line.ok { color: #9DC45A; }
+    .log-line.err { color: #cf6679; }
+    .log-line.warn { color: #d4a44c; }
+    .log-line.info { color: #e8e8e4; }
 
     /* Scrollbar */
     .log::-webkit-scrollbar { width: 4px; }
     .log::-webkit-scrollbar-track { background: transparent; }
-    .log::-webkit-scrollbar-thumb { background: #ccc; border-radius: 2px; }
-
-    @media (prefers-color-scheme: dark) {
-      body { background: #1a1a1a; color: #e8e8e4; }
-      .logo { background: transparent; }
-      .title { color: #e8e8e4; }
-      .section { background: #242424; border-color: #333; }
-      .chip-btn { background: #2c2c2c; border-color: #3a3a3a; color: #888; }
-      .chip-btn:hover { background: #333; color: #ccc; }
-      .chip-btn.active { background: #1e2e12; color: #9DC45A; border-color: #639922; }
-      .firmware-tag { background: #2c2c2c; border-color: #3a3a3a; }
-      .firmware-name { color: #e8e8e4; }
-      .baud-btn { background: #2c2c2c; border-color: #3a3a3a; color: #888; }
-      .baud-btn:hover { background: #333; color: #ccc; }
-      .baud-btn.active { background: #1e2e12; color: #9DC45A; border-color: #639922; }
-      .erase-row label { color: #888; }
-      .flash-btn { background: #e8e8e4; color: #1a1a1a; }
-      .gplay-btn { background: #e8e8e4 !important; color: #1a1a1a !important; }
-      .progress-bar-bg { background: #2c2c2c; }
-      .log { background: #242424; border-color: #333; }
-      .log-line.ok { color: #9DC45A; }
-      .log-line.info { color: #e8e8e4; }
-    }
+    .log::-webkit-scrollbar-thumb { background: #444; border-radius: 2px; }
   </style>
 </head>
 <body>
@@ -299,8 +276,8 @@
     <div class="section">
       <div class="section-label">Target chip</div>
       <div class="chip-grid">
-        <button class="chip-btn active" id="chipS2">ESP32-S2</button>
-        <button class="chip-btn" id="chipS3">ESP32-S3</button>
+        <button class="chip-btn" id="chipS2">ESP32-S2</button>
+        <button class="chip-btn active" id="chipS3">ESP32-S3</button>
       </div>
       <div class="firmware-tag">
         <i class="ti ti-file-zip" aria-hidden="true"></i>
@@ -331,7 +308,7 @@
     </div>
 
 
-
+    <div class="section">
     <div class="status-row">
       <div class="status-dot" id="statusDot"></div>
       <div class="status-text" id="statusText">Ready</div>
@@ -349,6 +326,7 @@
         <span id="progressPct">0%</span>
       </div>
     </div>
+    </div>
 
     <div class="section" style="padding: 0;">
       <div class="log" id="log"></div>
@@ -356,7 +334,7 @@
 
     <div class="section" style="display:flex; align-items:center; justify-content:space-between; gap:12px;">
       <div>
-        <div class="section-label" style="margin-bottom:4px;font-size:16px;font-weight:bold;color:#e8e8e4;">CNC Control</div>
+        <div class="section-label" style="margin-bottom:4px;font-size:16px;font-weight:bold;color:#aaa;">CNC Control</div>
         <div style="font-size:12px; color:#888;">Control app available on the play store</div>
       </div>
       <a href="https://play.google.com/store/apps/details?id=dngsoftware.cnccontrol" target="_blank" style="
@@ -518,7 +496,7 @@
     document.getElementById('baud-921600').addEventListener('click', () => selectBaud(921600));
     document.getElementById('flashBtn').addEventListener('click', startFlash);
 
-    selectChip('s2');
+    selectChip('s3');
     log('Select your target chip then click Connect & Flash', 'info');
   </script>
 </body>
