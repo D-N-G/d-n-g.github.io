@@ -1,0 +1,31 @@
+
+.background {
+  background-color: #0F172A;
+  background-image: url("background.png");
+  background-size: cover;
+  background-position: center;
+}
+
+.logo {
+  background-image: url("logo.png");
+  background-size: contain;
+  background-repeat: no-repeat;
+  background-position: center;
+}
+
+.splash {
+  background-color: #0F172A;
+  background-image: url("splash.png");
+  background-size: cover;
+  background-position: center;
+}
+
+.progressBar {
+  background-color: #42C0FB;
+}
+
+.watermark {
+  background-image: url("watermark.png");
+  background-size: 64px 64px;
+  background-repeat: no-repeat;
+}
